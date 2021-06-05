@@ -1,2 +1,4 @@
 docker-persistence/
 .env
+/out/
+/Set-up/Set-up.iml
