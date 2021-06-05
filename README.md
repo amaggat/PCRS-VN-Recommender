@@ -1,101 +1,127 @@
-# Harness with Docker-compose
-**Version 1.1-SNAPSHOT**
+# [PCRS-VN](name)
 
-With docker-compose Harness and all services it depends on run in Docker Containers, even the harness-cli is installed in its own container. This makes it fairly easy to install on a single machine for experiments or when only vertical scaling is required.
+## [Introduction](#introduction)
 
-# Harness + UR
+PCRS-VN is our project on Web application development course
+at [VNU University of Engineering and Technology](http://uet.vnu.edu.vn/). We were inspired
+by [PcPartPicker](http://pcpartpicker.com), a website that allows users create their own PC and check their
+compatibility, it also allow users to compare price from different retail stores.
 
-![](https://docs.google.com/drawings/d/e/2PACX-1vQocPhRrFn1TJAeWdcr2v9oD7_T9C261DLTwqueoESuubOcQtk1Iv7KZt6M7sSdvqocl8fSvtU6bf_K/pub?w=1193&amp;h=758)
+## [Demo](demo)
+
+1. The homescreen:
+   ![Dashboard](images/dashboard.png)
+2. The System Builder:
+   ![Main area](images/build-pc.png)
+3. Browsing PC components:
+   ![Browsing](images/browse-product.png)
+4. We have compiled a list of multi-purpose PCs, with filters for users to narrow down their choice:
+   ![Build Guide](images/build-guide.png)
+5. Product details with ratings and similar products:
+   ![Product details](images/product-details.png)
+6. All products were crawled from different retail stores. We want to create a website where user can easly check for their items for their wishlist with its price, promo from retailer ...
+   ![Product-detail](images/retailers.png)
+
+## [Usage](usage)
+We are still working on deployment.
+The website will avaiable someday soon, thanks for your patient.
+
+## [Database](data)
+
+We crawl product, price, promo, ... from many retail stores such as [GearVN](https://gearvn.com/)
+, [AnPhat](https://www.anphatpc.com.vn/), [HanoiComputer](https://www.hanoicomputer.vn/), ... that users can access
+easly.
+
+*Note:* All the data we have are crawled from their public website.
+
+## Front-end
+
+In the project directory, you can run:
+
+### `npm install`
+To install all the dependencies
 
 
-# Prerequisites
+### `npm start`
 
- 1. Install the Docker components for managing containers. This should be done as a regular user on the host -- a non-root user with passwordless sudoer permissions. See instructions [like these](https://docs.docker.com/install/) or as appropriate for your "host" OS. You'll need from Docker:
-     - Docker itself, including whtever is needed to host running containers.
-     - Docker-compose, some extensions that allow a network of containers to be run on a single host. 
- 2. Although this project MAY work on Windows it has not been tested and the examples commands below assume a 'nix style command shell like bash.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The page will reload if you make edits.
+You will also see any lint errors in the console.
 
-# Configure
+*For more detail, please checkout our Front-end service [here](https://github.com/amaggat/PCRS-VN-Frontend)*
 
-Map container directories into the host filesystem for all of the composed containers.
 
- - `cd harness-docker-compose`
- - `cp .env.sample .env`
- - edit the `.env` file if the defaults are not adequate. 
+## Back-end
 
-One important thing to note is that in order to import files using `harness-cli import <engine-id> some/path/to/json` the path to the json must be resolved in the harness container AND the harness-cli container will need a place to persist engine json files. This is solved by mapping a host directory into both containers (for convenience) like this:
+1. Add application.properties to src/main/resources with below content
 
-![](https://docs.google.com/drawings/d/e/2PACX-1vQFb4EfmP6Ocy1UxjqBd8bVPFVumIIY_vrgDO8i5zvmrvwporCpG2O3L9ZKhsiZl3N0zO_SWKuFZ4Nt/pub?w=1123&h=271)
+```
+spring.jpa.hibernate.ddl-auto=none
+spring.datasource.url= jdbc:mysql://localhost:3306/ (link to pcrs database)
+spring.datasource.username= (insert username)
+spring.datasource.password= (insert password)
+spring.servlet.multipart.enabled=true
+# Threshold after which files are written to disk.
+spring.servlet.multipart.file-size-threshold=2KB
+# Max file size.
+spring.servlet.multipart.max-file-size=200MB
+# Max Request Size
+spring.servlet.multipart.max-request-size=215MB
+## File Storage Properties
+# Please change this to the path where you want the uploaded files to be stored.
+file.upload-dir=(Directory)/PCRS-Chatbot/voice/audio
+```
 
-# Deployment
 
-With the docker daemon running:
+2. Import database.sql to MySQL with your database.
 
- - `docker-compose up -d --build` for first time setup
+3. Run ```BackEndApplication.java``` and you ready to go.
 
-Once deployed one or more containers in the collection can be updated. It is best to explore the docker-compose cli and options as well as docker commands. Some useful commands for updates are:
- 
- - `docker-compose down` stops all container in the local yaml file. Do this before any other docker-compose updates.
- - `git pull origin <branch>` for this repo the lastest vesion under test is in branch `develop`, the last stable release is in `master`. The `git` repo contains the latest project structure and `docker-compose.yml`.
- - `docker-compose up -d --build --force-recreate` to bring up all updated containers by recreating all images.
- - `docker-compose pull` is a very important command that will get the latest image version from the ActionML automated CI/CD pipeline. **Note**: this project uses a possibly unstable develop/SNAPSHOT version of Harness. To change this, edit docker-compose.yml and change the versions to `harness:latest` and `harness-cli:latest`, which will get stable released versions.
 
-# Operations
+*For more detail, please checkout our Back-end service [here](https://github.com/amaggat/PcPartPickerVN_BackEndService)*
 
-Once installed the containers work somewhat like a cluster of virtual machines all running on a single host. You can login to them, examine logs, and start and stop them.
 
-## Upgrades Experimental
+## Recommender
+1. If you are familiar with Docker and Docker Compose, here is the "one-liner":
 
-**Note:** This project uses [watchtower](https://containrrr.github.io/watchtower/) to monitor the image tagged actionml/harness:develop When it is updated the new image will be automatically pulled and deployed. This may not fit your use case and since the "develop" image is targeted this will pull **unreleased** code! To change this, fork the project and edit docker-compose.yml to target any supported image tag, like actionml/harness/latest to get the latest release. 
+```git clone https://github.com/actionml/harness-docker-compose.git && cd harness-docker-compose && cp .env.sample .env && docker-compose up -d --build```
 
-This is not a thorough upgrade mechanism since some migration of data may be required during an upgrade so beware anything but experimental use of this feature based on watchtower.
+2. Move config.json to harness-docker-compose/docker-persistence/harness/data.
+3. Open harness-cli. Use this command:```harness-cli add data/config.json```
+4. Run ```Setup.java``` and you ready to go.
 
-## Upgrades Stable
+*For more detail, please checkout our Recommender service [here](https://github.com/amaggat/PCRS-VN-Recommender)* \
+*For more commands, please checkout [here](https://actionml.com/docs/h_ur_queries)*
 
-To use this docker-comnpose project reliably is is best to target a named version of Harness tagged with 0.5.1 (due for release Feb 28 2020) or later and only upgrade manually by updating the image tag you have in docker-compose.yml and following Docker instructions for things like:
+## Chatbot
+1. Install all requirements
+2. Run ```application.py``` and you ready to go.
 
- - `docker-compose pull`
- - `docker-compose down`
- - `docker-compose up -d --build --force-recreate`
+## [Our team](team)
+- Dung M. Nguyen
+  [Contact: [GitHub](https://github.com/manhdung20112000) [Facebook](https://www.facebook.com/nmd2000)]
 
- Be aware the this may be dangerous if Harness schemas have changed, consult release notes for your version and the version you wish to use
+- Thanh T. Tran
+  [Contact: [GitHub](https://github.com/amaggat) [Facebook](https://www.facebook.com/messages/t/100005149897099)]
 
-## Logs
+- Nhat Q. Le
+  [Contact: [GitHub](https://github.com/fuzeless) [Facebook](https://www.facebook.com/fuzeless)]
 
-Harness logs are in the `docker-persistence/harness/...` directory and can be `tail`ed on the host as any local log file. Other containers may have logs available by using:
+- Hung P. Quang
+  [Contact: [GitHub](https://github.com/heor2807) [Facebook](https://www.facebook.com/srw.king)]
 
-    docker-compose logs <some-container-id>
+- Binh M. Le
+  [Contact: [GitHub](https://github.com/LukeShrek) [Facebook](https://www.facebook.com/luke.shrek)]
+  
+- Hieu M. Tran
+  [Contact: [GitHub](https://github.com/hieutm211) [Facebook](https://www.facebook.com/hieutm211x)]
 
-## Monitoring
-   
-Simple monitoring can be done by looking at memory, disk and CPU usage since all containers are running on the host.
+- Hieu V. Pham
+  [Contact: [GitHub](https://github.com/hieuphamjr) [Facebook](https://www.facebook.com/HieuPhamJR11)]
 
-To get more granular several tools allow monitoring individual containers.
+##### *Special thanks to:*
+- Anh T. Tran
+  [Contact: [GitHub](https://github.com/zzNuAzz) [Facebook](https://www.facebook.com/SoNguyenTo216/)]
 
-# Persistence
 
-The way Docker supports persistence uses a mapping of container internal file system to the host's file system. By default they will appear in `harness-docker-compose/docker-persistence/...` Be careful with these files, they will contain data for the database and elasticsearch. 
-
-# Harness CLI
-
-The Harness-CLI is also started in a container. To use it, log-in.
-
- - `docker-compose exec harness-cli bash`
-
-    This starts a `bash` shell in the container, configured to communicate with the Harness container
-    
- - `docker-compose exec harness-cli bash -c 'harness-cli status'`
-
-    this will return the status of Harness
-
-The [harness-cli](https://github.com/actionml/harness-cli) can also be installed on the host OS as desired. It uses the REST API to control Harness and so can be on any host that can connect.
-
-# Versions
-
- - **1.1-SNAPSHOT**: Upgrades to Mongo 4.2
-
- - **1.0**: containers: 
-     - harness develop
-     - harness-cli develop
-     - mongo:3.2
-     - elasticsearch:7.6 

@@ -79,7 +79,7 @@ This should work for an ActionML k8s installation. Change Elasticsearch and Spar
 
 ### Docker-compose
 
-This deployment assumes you use the ActionML docker-compose.yml. Start with instructions [here](README.md) Login to the `harness-cli` container to run the test. Using the ActionML docker-compose.yml and all the containers it specifies, use the following `sparkConf`.
+This deployment assumes you use the ActionML docker-compose.yml. Start with instructions [here](README_Harness.md) Login to the `harness-cli` container to run the test. Using the ActionML docker-compose.yml and all the containers it specifies, use the following `sparkConf`.
 
 ```
   "sparkConf": {
