@@ -83,7 +83,9 @@ file.upload-dir=(Directory)/PCRS-Chatbot/voice/audio
 
 
 ## Recommender
-1. If you are familiar with Docker and Docker Compose, here is the "one-liner": ```cp .env.sample .env && docker-compose up -d --build```
+1. If you are familiar with Docker and Docker Compose, here is the "one-liner":
+
+```cp .env.sample .env && docker-compose up -d --build```
 
 2. Move config.json to harness-docker-compose/docker-persistence/harness/data.
 3. Open harness-cli. Use this command:```harness-cli add data/config.json```
