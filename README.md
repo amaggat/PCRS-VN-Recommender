@@ -83,7 +83,8 @@ file.upload-dir=(Directory)/PCRS-Chatbot/voice/audio
 
 
 ## Recommender
-1. If you are familiar with Docker and Docker Compose, here is the "one-liner":```cp .env.sample .env && docker-compose up -d --build```
+1. If you are familiar with Docker and Docker Compose, here is the "one-liner": ```cp .env.sample .env && docker-compose up -d --build```
+
 2. Move config.json to harness-docker-compose/docker-persistence/harness/data.
 3. Open harness-cli. Use this command:```harness-cli add data/config.json```
 4. Run ```Setup.java``` and you ready to go.
@@ -96,6 +97,11 @@ file.upload-dir=(Directory)/PCRS-Chatbot/voice/audio
 2. Run ```application.py``` and you ready to go.
 
 *For more detail, please checkout our Chatbot service [here](https://github.com/amaggat/PCRS-VN-Chatbot)*
+
+## Reports
+- For [PCRS-VN-Recommender](https://drive.google.com/file/d/1FF7BnB3xGzwmwUg_lM3AqHw3QOUW7_Uh/view?usp=sharing)
+- For [PCRS-VN-Chatbot](https://drive.google.com/file/d/1xkb2A-W0y1YMv8oYvhhVtV7a5a1koHwZ/view?usp=sharing)
+
 
 ## [Our team](team)
 - Dung M. Nguyen
